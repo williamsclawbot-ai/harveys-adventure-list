@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harvey's Adventure List 🌈</title>
+<meta name="description" content="All our favourite Gold Coast spots to take Harvey.">
+<meta name="theme-color" content="#7ad7c1">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Harvey">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff8fab; --pink-soft:#ffd6e0;
+    --blue:#6cc5ff; --blue-soft:#d4f0ff;
+    --mint:#7ad7c1; --mint-soft:#d3f5ec;
+    --yellow:#ffcb47; --yellow-soft:#fff0c9;
+    --purple:#b394ff; --purple-soft:#ece2ff;
+    --coral:#ff9a76; --coral-soft:#ffe2d6;
+    --ink:#4a3b52; --ink-soft:#7c6e84;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Quicksand',sans-serif;
+    color:var(--ink);
+    background:linear-gradient(160deg,#d4f0ff 0%,#d3f5ec 35%,#fff0c9 70%,#ffd6e0 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+    padding:0 0 60px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px;}
+
+  /* Header */
+  header{text-align:center;padding:38px 18px 14px;}
+  header .balloons{font-size:2rem;letter-spacing:6px;}
+  h1{
+    font-family:'Baloo 2',cursive;
+    font-size:clamp(2.1rem,6vw,3.6rem);
+    font-weight:800;
+    line-height:1.05;
+    margin:6px 0 4px;
+    color:var(--ink);
+    text-shadow:2px 3px 0 #fff;
+  }
+  h1 .glow{color:var(--pink);}
+  .subtitle{font-size:1.05rem;font-weight:600;color:var(--ink-soft);max-width:560px;margin:0 auto;}
+
+  /* Controls */
+  .controls{
+    background:rgba(255,255,255,0.72);
+    backdrop-filter:blur(8px);
+    border:3px solid #fff;
+    border-radius:26px;
+    padding:18px 18px 20px;
+    margin:22px 0 8px;
+    box-shadow:0 10px 30px rgba(120,90,140,0.12);
+    position:sticky;top:10px;z-index:20;
+  }
+  .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+  .search-box{
+    flex:1;min-width:220px;display:flex;align-items:center;gap:8px;
+    background:#fff;border:2.5px solid var(--blue-soft);border-radius:18px;padding:10px 16px;
+  }
+  .search-box input{border:none;outline:none;font-family:'Quicksand';font-size:1rem;font-weight:600;width:100%;color:var(--ink);background:transparent;}
+  .search-box input::placeholder{color:#b9aec1;}
+  .surprise{
+    border:none;cursor:pointer;font-family:'Baloo 2';font-weight:700;font-size:1rem;color:#fff;
+    background:linear-gradient(135deg,var(--purple),var(--pink));
+    padding:11px 20px;border-radius:18px;box-shadow:0 6px 14px rgba(179,148,255,0.4);
+    transition:transform .15s;white-space:nowrap;
+  }
+  .surprise:hover{transform:translateY(-2px) rotate(-1deg);}
+  .surprise:active{transform:scale(.96);}
+
+  .filter-label{font-family:'Baloo 2';font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:1px;color:var(--ink-soft);margin:4px 0 7px;display:block;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{
+    cursor:pointer;border:2.5px solid transparent;border-radius:16px;padding:7px 14px;
+    font-family:'Quicksand';font-weight:700;font-size:.92rem;color:var(--ink);
+    background:#fff;transition:all .15s;user-select:none;white-space:nowrap;
+  }
+  .chip:hover{transform:translateY(-1px);}
+  .chip.active{color:#fff;border-color:#fff;box-shadow:0 5px 12px rgba(120,90,140,0.18);}
+  .chip[data-group="cat"].active{background:var(--pink);}
+  .chip[data-group="loc"].active{background:var(--blue);}
+  .divider{height:1px;background:rgba(120,90,140,0.12);margin:14px 0;}
+
+  .count{font-weight:700;color:var(--ink-soft);font-size:.95rem;margin:18px 4px 4px;}
+
+  /* Grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;margin-top:8px;}
+  .card{
+    background:var(--card);border-radius:22px;padding:20px 20px 18px;position:relative;overflow:hidden;
+    border:3px solid #fff;box-shadow:0 8px 22px rgba(120,90,140,0.13);
+    transition:transform .18s, box-shadow .18s;display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(120,90,140,0.2);}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:8px;background:var(--accent,var(--pink));}
+  .card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;}
+  .emoji{font-size:2.3rem;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,0.08));}
+  .card h3{font-family:'Baloo 2';font-weight:700;font-size:1.22rem;line-height:1.1;flex:1;}
+  .suburb{display:inline-flex;align-items:center;gap:4px;font-weight:700;font-size:.82rem;color:var(--ink-soft);margin:2px 0 0;}
+  .hours{
+    display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.85rem;
+    background:var(--soft,var(--pink-soft));color:var(--ink);border-radius:12px;padding:5px 11px;margin:8px 0 10px;align-self:flex-start;
+  }
+  .highlight{font-weight:600;font-size:.95rem;line-height:1.4;color:var(--ink);flex:1;}
+  .note{font-size:.78rem;font-weight:600;color:var(--coral);margin-top:7px;font-style:italic;}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+  .badge{font-size:.74rem;font-weight:700;background:#f4eef8;color:var(--ink-soft);border-radius:10px;padding:4px 9px;}
+
+  /* ribbons */
+  .ribbon{position:absolute;top:14px;right:-2px;font-family:'Baloo 2';font-weight:800;font-size:.85rem;color:#fff;
+    padding:4px 13px 4px 11px;border-radius:12px 0 0 12px;box-shadow:0 3px 8px rgba(0,0,0,0.15);}
+  .ribbon.gold{background:linear-gradient(135deg,#ffd86b,#ffb300);}
+  .ribbon.silver{background:linear-gradient(135deg,#d8d8e0,#a9a9bd);}
+  .ribbon.bronze{background:linear-gradient(135deg,#f0a868,#cf7e3c);}
+  .ribbon.pass{background:linear-gradient(135deg,var(--purple),var(--pink));}
+
+  .empty{text-align:center;padding:50px 20px;font-weight:700;color:var(--ink-soft);font-size:1.1rem;grid-column:1/-1;}
+
+  footer{text-align:center;margin-top:38px;font-weight:600;color:var(--ink-soft);font-size:.85rem;line-height:1.6;}
+  footer .heart{color:var(--pink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="balloons">🎈🌈🎈</div>
+    <h1>Harvey's <span class="glow">Adventure</span> List</h1>
+    <p class="subtitle">All our favourite Gold Coast spots in one place 💛 Tap a filter, search, or hit Surprise Me when you can't decide!</p>
+  </header>
+
+  <div class="controls">
+    <div class="search-row">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="search" placeholder="Search for a park, beach, class...">
+      </div>
+      <button class="surprise" id="surprise">🎲 Surprise Me!</button>
+    </div>
+
+    <span class="filter-label">What kind of day?</span>
+    <div class="chips" id="catChips"></div>
+
+    <div class="divider"></div>
+
+    <span class="filter-label">📍 Where are we headed?</span>
+    <div class="chips" id="locChips"></div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    Made with <span class="heart">♥</span> for Harvey &amp; Mum 🌟<br>
+    Theme park & class hours change seasonally - quick double-check before a big drive! 🚗
+  </footer>
+</div>
+
+<script>
+const CATS = {
+  "Theme Parks":      {emoji:"🎢", accent:"#b394ff", soft:"#ece2ff"},
+  "Parks & Playgrounds":{emoji:"🛝", accent:"#7ad7c1", soft:"#d3f5ec"},
+  "Classes & Play":   {emoji:"🎨", accent:"#ff8fab", soft:"#ffd6e0"},
+  "Nature & Beaches": {emoji:"🏖️", accent:"#6cc5ff", soft:"#d4f0ff"},
+  "Rainy Day":        {emoji:"☔", accent:"#ff9a76", soft:"#ffe2d6"},
+  "Markets":          {emoji:"🍓", accent:"#ffcb47", soft:"#fff0c9"}
+};
+
+const DATA = [
+  // THEME PARKS (passes)
+  {name:"Sea World", cat:"Theme Parks", loc:"North", suburb:"Main Beach", emoji:"🐬", hours:"10am - 5pm daily", pass:true,
+   highlight:"Nickelodeon Land has gentle toddler rides, plus the dolphin & penguin shows he'll love. Best all-rounder for little ones.", note:"Hours vary seasonally - check before you go"},
+  {name:"Movie World", cat:"Theme Parks", loc:"North", suburb:"Oxenford", emoji:"🎬", hours:"10am - 5pm daily", pass:true,
+   highlight:"The Looney Tunes precinct (carousel, junior driving school) and the daily Star Parade with characters.", note:"Hours vary seasonally - check before you go"},
+  {name:"Wet'n'Wild", cat:"Theme Parks", loc:"North", suburb:"Oxenford", emoji:"💦", hours:"10am - 3pm (winter)", pass:true,
+   highlight:"Wet'n'Wild Junior - a fenced little-kids water zone with mini slides and shallow pools. Best in warmer months.", note:"Some Junior areas close in winter - check first"},
+  {name:"Dreamworld", cat:"Theme Parks", loc:"North", suburb:"Coomera", emoji:"🎡", hours:"10am - 5pm daily", pass:true,
+   highlight:"Wiggles World & ABC Kids World are built just for toddlers, plus tigers, koalas & kangaroos. Top pick for his age.", note:"Some weekdays shorter - check the calendar"},
+  {name:"Currumbin Wildlife Sanctuary", cat:"Theme Parks", loc:"South", suburb:"Currumbin", emoji:"🦜", hours:"9am - 4pm daily", pass:true,
+   highlight:"The 8am lorikeet feeding, hand-feeding kangaroos, and pram-friendly grounds. Calmest, most nature-led day out."},
+
+  // CLASSES & PLAY
+  {name:"Toddler Sense (Baby Sensory)", cat:"Classes & Play", loc:"Central", suburb:"Ashmore", emoji:"🌟", hours:"Weekday mornings, term-based",
+   highlight:"Structured songs, lights & sensory play for 13mo-3.5yr. Sessions around 9am, 10:20am & 11:40am. Books by term.", features:["💛 His class"]},
+  {name:"The Messy Place", cat:"Classes & Play", loc:"Central", suburb:"Ashmore", emoji:"🖐️", hours:"Per-session / term - check booking",
+   highlight:"Themed messy & sensory play sessions where the mess is the whole point. Around 90 mins of glorious chaos.", features:["💛 His class"]},
+  {name:"EMF Jnr", cat:"Classes & Play", loc:"Central", suburb:"Nerang & Pacific Fair", emoji:"🤸", hours:"Mon-Fri 8am-6pm, Sat 8am-4pm, Sun 8am-3pm",
+   highlight:"Huge indoor play centre - ball pits, slides, tunnels & climbing. Casual play ~$10-12. Crèche option for members.", features:["🏠 Indoor","🚻 Toilets"]},
+
+  // PARKS & PLAYGROUNDS (ranked)
+  {name:"Greenheart Robina Parklands", cat:"Parks & Playgrounds", loc:"Central", suburb:"Robina", emoji:"🥇", hours:"Dawn - dusk", rank:1,
+   highlight:"The newest and best all-rounder - fully fenced, shaded water play, pumps, weirs & sandpit. The dream toddler park.", features:["🚧 Fenced","💦 Water play","🌳 Shade","🚻 Toilets"]},
+  {name:"Broadwater Parklands", cat:"Parks & Playgrounds", loc:"North", suburb:"Southport", emoji:"🥈", hours:"Dawn - dusk", rank:2,
+   highlight:"Free Rockpool splash area, swimming lagoon & a fenced bouncy pillow. A whole morning in one spot.", features:["💦 Water play","🚧 Fenced pillow","🚻 Toilets","☕ Café"]},
+  {name:"Harley Park", cat:"Parks & Playgrounds", loc:"North", suburb:"Labrador", emoji:"🥉", hours:"Dawn - dusk", rank:3,
+   highlight:"Both playgrounds fully fenced & sheltered, nautical theme, with calm Broadwater water right beside it.", features:["🚧 Fenced","🌳 Shade","🚻 Toilets","☕ Café"]},
+  {name:"Pirate Park (Palm Beach Parklands)", cat:"Parks & Playgrounds", loc:"South", suburb:"Palm Beach", emoji:"🏴‍☠️", hours:"Dawn - dusk", rank:4,
+   highlight:"Famous pirate-ship playground with sand, plus a very calm swimming spot and a little pedal-rail train.", features:["🚧 Part fenced","💦 Calm swim","🚻 Toilets","☕ Café"]},
+  {name:"Pizzey Park", cat:"Parks & Playgrounds", loc:"South", suburb:"Miami", emoji:"🛴", hours:"Dawn - dusk", rank:5,
+   highlight:"Four playgrounds plus water play in one big park - easy to find a toddler-friendly corner. Bring the scooter.", features:["💦 Water play","🌳 Shade","🚻 Toilets"]},
+  {name:"Paradise Point Parklands", cat:"Parks & Playgrounds", loc:"North", suburb:"Paradise Point", emoji:"🎠", hours:"Dawn - dusk", rank:6,
+   highlight:"Toddler-scaled playground (mini merry-go-round, little slides) beside a calm, shallow Broadwater swim. Lovely & relaxed.", features:["💦 Calm swim","🌳 Shade","🚻 Toilets","☕ Café"]},
+  {name:"Kurrawa Park", cat:"Parks & Playgrounds", loc:"Central", suburb:"Broadbeach", emoji:"🐠", hours:"Dawn - dusk", rank:7,
+   highlight:"Fully fenced, all-abilities undersea-themed playground with sand zones. Beach & cafés a short walk away.", features:["🚧 Fenced","🌳 Shade","🚻 Toilets","☕ Café"]},
+  {name:"Central Park", cat:"Parks & Playgrounds", loc:"North", suburb:"Pacific Pines", emoji:"🦆", hours:"Dawn - dusk", rank:8,
+   highlight:"A dedicated gated toddler area with swing, slide & cubby beside a duck lake. Great for the northern end.", features:["🚧 Gated tots area","🌳 Shade","🚻 Toilets"]},
+  {name:"Macintosh Island Park", cat:"Parks & Playgrounds", loc:"Central", suburb:"Surfers Paradise", emoji:"🦚", hours:"Dawn - dusk", rank:9,
+   highlight:"Shaded, leafy hideaway with streams, peacocks & ducks. A pretty pram walk plus a play - lovely on a hot day.", features:["🌳 Full shade","🚻 Toilets"]},
+  {name:"Botanic Gardens Playground", cat:"Parks & Playgrounds", loc:"Central", suburb:"Benowa", emoji:"🌷", hours:"Dawn - dusk", rank:10,
+   highlight:"Fully shaded timber playground with a little toddler treehouse, pram-friendly paths & ducks. Calm and sweet.", features:["🌳 Full shade","🚻 Toilets","☕ Café"]},
+  {name:"Firth Park", cat:"Parks & Playgrounds", loc:"Hinterland", suburb:"Mudgeeraba", emoji:"🌼", hours:"Dawn - dusk", rank:11,
+   highlight:"Has a dedicated fenced-off toddler playground, separate from the bigger kids' equipment and skate park.", features:["🚧 Fenced tots area","🚻 Toilets"]},
+  {name:"Pratten Park", cat:"Parks & Playgrounds", loc:"Central", suburb:"Broadbeach", emoji:"🌊", hours:"Dawn - dusk", rank:12,
+   highlight:"Smaller fully-fenced coastal playground with a harnessed swing - a handy safe option near the beach.", features:["🚧 Fenced","🚻 Toilets nearby"]},
+  {name:"Justins Park", cat:"Parks & Playgrounds", loc:"South", suburb:"Burleigh Heads", emoji:"🌅", hours:"Dawn - dusk", rank:13,
+   highlight:"Small playground with the best view on the coast. Great as a stop on a pram walk - not fenced, so stay close.", features:["💦 Beach beside","☕ Cafés"]},
+  {name:"Hinze Dam Playground", cat:"Parks & Playgrounds", loc:"Hinterland", suburb:"Advancetown", emoji:"⛵", hours:"Dawn - dusk", rank:14,
+   highlight:"Fully shaded ship-themed playground with a toddler-friendly round swing & rocker. Scenic little drive out.", features:["🌳 Full shade","🚻 Toilets","☕ Café"]},
+
+  // NATURE & BEACHES
+  {name:"Tallebudgera Creek", cat:"Nature & Beaches", loc:"South", suburb:"Tallebudgera", emoji:"🐚", hours:"Best at low-mid tide",
+   highlight:"The coast's favourite calm-water spot - clear, no waves, gently sloping sandy bottom. Swim in front of the playground.", features:["💦 Calm swim","🌳 Shade","🚻 Toilets","🔥 BBQ"]},
+  {name:"Currumbin Rock Pools", cat:"Nature & Beaches", loc:"Hinterland", suburb:"Currumbin Valley", emoji:"🪨", hours:"Daylight hours",
+   highlight:"Cool, calm freshwater rock pools in the hinterland - shaded and slow-paced for a hot-day splash. Natural, so supervise closely.", features:["💦 Freshwater","🌳 Shade"]},
+  {name:"Federation Walk & The Spit", cat:"Nature & Beaches", loc:"North", suburb:"Main Beach", emoji:"🌴", hours:"Daylight hours",
+   highlight:"Flat, pram-friendly trail through coastal bushland to The Spit. Perfect for a nap-in-the-pram walk with calm bay spots.", features:["👶 Pram-friendly","🌳 Shade"]},
+  {name:"Currumbin Alley", cat:"Nature & Beaches", loc:"South", suburb:"Currumbin", emoji:"🏄", hours:"Daylight hours",
+   highlight:"Calm creek-mouth water that's much gentler than the open surf - a relaxed paddle spot for little legs.", features:["💦 Calm swim","🚻 Toilets","☕ Cafés"]},
+
+  // RAINY DAY
+  {name:"Bella's Wonderland", cat:"Rainy Day", loc:"North", suburb:"Southport", emoji:"🦄", hours:"9am - 5pm daily",
+   highlight:"Pastel and super toddler-cute - mini grocery & kitchen play upstairs plus a big ball pit. Socks needed!", features:["🏠 Indoor","🚻 Toilets"]},
+  {name:"Doodlebugs", cat:"Rainy Day", loc:"South", suburb:"Miami", emoji:"🐞", hours:"Weekdays 8am - 2pm",
+   highlight:"Has a dedicated under-1 soft-play area - lovely for a mums-group catch-up. Under-1s free.", features:["🏠 Indoor","🚻 Toilets","☕ Café"]},
+  {name:"Chipmunks", cat:"Rainy Day", loc:"Central", suburb:"Robina", emoji:"🐿️", hours:"9am - 5pm daily",
+   highlight:"Separate toddler zone with a barista café for you, right by Robina Town Centre. Under-1s free.", features:["🏠 Indoor","🚻 Toilets","☕ Café"]},
+  {name:"Treetop Play Area", cat:"Rainy Day", loc:"Central", suburb:"Robina", emoji:"🌲", hours:"Centre hours",
+   highlight:"FREE gated little play area inside Robina Town Centre with pram parking - a great quick rainy-day stop.", features:["🆓 Free","🚧 Gated","🏠 Indoor"]},
+  {name:"First Harvest Café Play", cat:"Rainy Day", loc:"Central", suburb:"Nerang", emoji:"☕", hours:"Café hours",
+   highlight:"FREE gated café-playground next to EMF Jnr - ideal for pre-walkers and usually nice and quiet.", features:["🆓 Free","🚧 Gated","☕ Café"]},
+  {name:"Pacific Fair Toddler Room", cat:"Rainy Day", loc:"Central", suburb:"Broadbeach", emoji:"🛍️", hours:"Centre hours",
+   highlight:"FREE little toddler play room (behind H&M) plus more play areas near Target - handy when you're already shopping.", features:["🆓 Free","🏠 Indoor"]},
+  {name:"Library Story Time", cat:"Rainy Day", loc:"Central", suburb:"Branches city-wide", emoji:"📚", hours:"Term-time sessions - check calendar",
+   highlight:"FREE Baby Rhyme Time & Toddler Time at City of Gold Coast libraries - songs, rhymes & books. Find your nearest branch.", features:["🆓 Free","🏠 Indoor"]},
+
+  // MARKETS
+  {name:"The Village Markets", cat:"Markets", loc:"South", suburb:"Burleigh Heads", emoji:"🌸", hours:"1st & 3rd Sun, 8am - 1pm",
+   highlight:"Grassy, pram-friendly artisan & fashion markets on the school oval. Coffee, treats and a relaxed wander.", features:["👶 Pram-friendly","☕ Coffee"]},
+  {name:"Palm Beach Farmers' Market", cat:"Markets", loc:"South", suburb:"Palm Beach", emoji:"🥕", hours:"Every Sat, 6 - 11:30am",
+   highlight:"Open-air fresh produce, coffee & breakfast - easy with a pram for an early Saturday outing.", features:["👶 Pram-friendly","☕ Coffee"]},
+  {name:"Carrara Markets", cat:"Markets", loc:"Central", suburb:"Carrara", emoji:"🎪", hours:"Sat & Sun, 8am - 3pm",
+   highlight:"The most kid-focused - pony rides, a baby animal farm & face painting. Free entry & parking.", features:["🐴 Pony rides","🐑 Animals","🆓 Free entry"]},
+  {name:"Miami Marketta", cat:"Markets", loc:"South", suburb:"Miami", emoji:"🍜", hours:"Wed - Sat, from 5pm",
+   highlight:"Street food & live music night market. Go early (5-6pm) with a toddler before it gets loud & busy.", features:["🍴 Street food","🎶 Live music"], note:"Night market - best for an early dinner"},
+  {name:"HOTA Markets", cat:"Markets", loc:"Central", suburb:"Bundall", emoji:"🎨", hours:"Sundays",
+   highlight:"Relaxed markets at the arts precinct with loads of lawn space, lakes & a gallery for a full morning out.", features:["🌳 Lots of lawn","☕ Café"]}
+];
+
+const grid = document.getElementById('grid');
+const countEl = document.getElementById('count');
+const searchEl = document.getElementById('search');
+let activeCat = "All";
+let activeLoc = "All";
+
+// Build chips
+function buildChips(){
+  const catChips = document.getElementById('catChips');
+  const locChips = document.getElementById('locChips');
+  const cats = ["All", ...Object.keys(CATS)];
+  const locs = ["All","North","Central","South","Hinterland"];
+  catChips.innerHTML = cats.map(c=>{
+    const e = c==="All" ? "✨" : CATS[c].emoji;
+    return `<div class="chip ${c==="All"?"active":""}" data-group="cat" data-val="${c}">${e} ${c}</div>`;
+  }).join('');
+  locChips.innerHTML = locs.map(l=>{
+    const e = {All:"🗺️",North:"⬆️",Central:"⭐",South:"⬇️",Hinterland:"⛰️"}[l];
+    return `<div class="chip ${l==="All"?"active":""}" data-group="loc" data-val="${l}">${e} ${l}</div>`;
+  }).join('');
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const group = chip.dataset.group;
+      document.querySelectorAll(`.chip[data-group="${group}"]`).forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      if(group==="cat") activeCat = chip.dataset.val; else activeLoc = chip.dataset.val;
+      render();
+    });
+  });
+}
+
+function ribbon(item){
+  if(item.pass) return `<div class="ribbon pass">🎟️ PASS</div>`;
+  if(item.rank===1) return `<div class="ribbon gold">🥇 #1</div>`;
+  if(item.rank===2) return `<div class="ribbon silver">🥈 #2</div>`;
+  if(item.rank===3) return `<div class="ribbon bronze">🥉 #3</div>`;
+  if(item.rank) return `<div class="ribbon" style="background:linear-gradient(135deg,#9fd8c8,#7ad7c1)">#${item.rank}</div>`;
+  return "";
+}
+
+function card(item){
+  const c = CATS[item.cat];
+  const feats = (item.features||[]).concat([]); // features already include emoji labels
+  const badges = feats.map(f=>`<span class="badge">${f}</span>`).join('');
+  return `<div class="card" style="--accent:${c.accent};--soft:${c.soft}">
+    ${ribbon(item)}
+    <div class="card-top">
+      <div class="emoji">${item.emoji}</div>
+      <div>
+        <h3>${item.name}</h3>
+        <div class="suburb">📍 ${item.suburb}</div>
+      </div>
+    </div>
+    <div class="hours">🕑 ${item.hours}</div>
+    <div class="highlight">${item.highlight}</div>
+    ${item.note?`<div class="note">⚠️ ${item.note}</div>`:""}
+    ${badges?`<div class="badges">${badges}</div>`:""}
+  </div>`;
+}
+
+function filtered(){
+  const q = searchEl.value.trim().toLowerCase();
+  return DATA.filter(i=>{
+    if(activeCat!=="All" && i.cat!==activeCat) return false;
+    if(activeLoc!=="All" && i.loc!==activeLoc) return false;
+    if(q){
+      const hay = (i.name+" "+i.suburb+" "+i.highlight+" "+i.cat).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function render(){
+  const list = filtered();
+  countEl.textContent = `${list.length} ${list.length===1?'adventure':'adventures'} to choose from 🎉`;
+  if(list.length===0){
+    grid.innerHTML = `<div class="empty">🙈 Nothing here yet - try another filter!</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(card).join('');
+}
+
+document.getElementById('surprise').addEventListener('click', ()=>{
+  const list = filtered();
+  if(list.length===0) return;
+  const pick = list[Math.floor(Math.random()*list.length)];
+  grid.innerHTML = card(pick);
+  countEl.textContent = `🎲 Today's pick: ${pick.name}! (tap a filter to see them all again)`;
+  window.scrollTo({top:document.querySelector('.count').offsetTop-20,behavior:'smooth'});
+});
+
+searchEl.addEventListener('input', render);
+
+buildChips();
+render();
+</script>
+</body>
+</html>

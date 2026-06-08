@@ -1,0 +1,13 @@
+{
+  "name": "Harvey's Adventure List",
+  "short_name": "Harvey",
+  "description": "All our favourite Gold Coast spots to take Harvey.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#d4f0ff",
+  "theme_color": "#7ad7c1",
+  "icons": [
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
