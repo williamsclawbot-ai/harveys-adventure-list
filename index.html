@@ -129,6 +129,12 @@
 
   footer{text-align:center;margin-top:38px;font-weight:600;color:var(--ink-soft);font-size:.85rem;line-height:1.6;}
   footer .heart{color:var(--pink);}
+
+  /* On phones the controls bar is tall, so let it scroll away instead of pinning */
+  @media (max-width:760px){
+    .controls{position:static;top:auto;padding:14px 14px 16px;margin:16px 0 4px;}
+    .count{margin-top:14px;}
+  }
 </style>
 </head>
 <body>
